@@ -1,0 +1,173 @@
+.carrito-principal {
+  background-color: #f7f5f2;
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.carrito-contenedor {
+  width: 100%;
+  max-width: 500px; /* Estilo formato celular/móvil como tu foto */
+  background-color: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.carrito-header {
+  background-image: url('/img/fondo-header.png'); /* Tu textura de onditas */
+  background-color: #e5dfd9; 
+  padding: 30px 20px;
+  color: #5c3a3b;
+}
+
+.carrito-header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: normal;
+}
+
+.carrito-lista {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Tarjeta de cada producto (Borde gris fino de tu diseño) */
+.carrito-item {
+  border: 1px solid #e0dad5;
+  padding: 15px;
+  border-radius: 4px;
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 15px;
+}
+
+/* El recuadro azul que se ve en tu primera foto cuando seleccionás el item */
+.carrito-item:first-child {
+  border: 2px solid #0088ff; 
+}
+
+.item-foto img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.item-detalles {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.item-detalles h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.item-talles {
+  font-size: 13px;
+  color: #7a6e67;
+  margin: 5px 0;
+}
+
+.item-controles {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+/* El contador - 1 + */
+.contador {
+  display: flex;
+  align-items: center;
+  background-color: #e0dad5;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.contador button {
+  background: none;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #5c3a3b;
+}
+
+.contador span {
+  padding: 0 10px;
+  font-size: 14px;
+}
+
+.item-precio {
+  font-weight: bold;
+  color: #333;
+  font-size: 15px;
+}
+
+/* Descripción abajo de la foto */
+.item-descripcion {
+  grid-column: span 2;
+  font-size: 11px;
+  color: #666;
+  line-height: 1.4;
+  margin: 5px 0 0 0;
+  text-align: justify;
+}
+
+/* Sección del Resumen de Pago */
+.carrito-resumen {
+  padding: 20px;
+  border-top: 1px solid #e0dad5;
+}
+
+.envio-aviso {
+  color: #b86266; /* Color rosa/bordó del envío gratis */
+  font-size: 13px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.resumen-linea {
+  display: flex;
+  justify-content: space-between;
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.resumen-linea.total {
+  font-size: 20px;
+  color: #000;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.cuotas-aviso {
+  color: #b86266;
+  font-size: 13px;
+  margin: 15px 0;
+}
+
+.btn-compra {
+  width: 100%;
+  background-color: #d1cbd4; /* El gris clarito de tu botón */
+  color: #333;
+  border: none;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.btn-compra:hover {
+  background-color: #bdbaaf;
+}

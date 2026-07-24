@@ -58,7 +58,7 @@ h1 {
 
 .fondo {
   height: 300px;
-  background-image: url("/img/fondo.jpg");
+  background-image: url("/img/fondo2.png");
   background-size: cover;
   background-position: center;
   position: relative;
@@ -113,21 +113,282 @@ h1 {
   height: 45px;
 }
 
-/* ========================= */
-/* PRODUCTOS DESTACADOS */
-/* ========================= */
 
+/* --- ESTILOS PARA LAS FOTOS DESTACADAS --- */
 .p-destacados {
-  width: 80%;
-  margin: 40px auto;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  gap: 15px;
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .p-destacados img {
   width: 100%;
-  height: 350px;
+  height: 100%;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 8px;
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* --- ESTILOS PARA EL PIE DE PÁGINA --- */
+.pie-pagina {
+  background-image: url('/img/fondo2.png');
+  background-color: #e5dfd9;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 40px 20px;
+  margin-top: 50px;
+  color: #5c3a3b;
+}
+
+.footer-columna {
+  text-align: center;
+}
+
+.footer-columna h4 {
+  font-weight: normal;
+  margin-bottom: 5px;
+  font-size: 16px;
+}
+
+.footer-columna p {
+  font-size: 14px;
+  margin: 0;
+}
+
+.caja-redes {
+  background-color: #5c3a3b;
+  padding: 8px 15px;
+  border-radius: 4px;
+  display: flex;
+  gap: 15px;
+  color: white;
+  font-size: 18px;
+  margin-top: 5px;
+}
+
+/* Evita que se desacomode la barra nav en pantallas chicas */
+nav {
+  background-color: #fff; 
+}
+
+/* Esto engloba la barra y sirve de base para ubicar las herramientas de la derecha */
+.contenedor-navegacion {
+  position: relative;
+  width: 100%;
+}
+
+/* NUEVA CAJA QUE UNE LOGIN Y CARRITO EN LA ZONA BLANCA */
+.iconos-derecha-nav {
+  position: absolute;
+  right: 40px;          /* Separación del borde derecho de la pantalla */
+  top: 50%;             /* Lo baja a la mitad de la barra */
+  transform: translateY(-25%); /* Alineación vertical fina con el texto */
+  display: flex;
+  gap: 20px;            /* Espacio de separación entre el ícono de login y el de carrito */
+  align-items: center;
+}
+
+/* Ajuste general para los botones del login y del carrito */
+.btn-nav-icono {
+  background: none;
+  border: none;
+  font-size: 26px;      /* Mantiene la escala de tu diseño original */
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-nav-icono:hover {
+  transform: scale(1.18); /* Efecto pop sutil al pasar el mouse por encima */
+}
+
+
+/* ========================================================================== */
+/* ESTILOS PARA LAS CATEGORÍAS (image_d335fd.jpg) */
+/* ========================================================================== */
+
+.item-menu-desplegable {
+  position: relative;
+}
+
+.submenu-lista {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ffffff;
+  border: 1px solid #e5dfd9;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+  padding: 10px 0;
+  margin-top: 15px;
+  list-style: none;
+  min-width: 260px;
+  z-index: 100;
+  border-radius: 4px;
+}
+
+.submenu-lista li {
+  color: #5c3a3b !important;
+  font-size: 16px !important;
+  font-family: 'Georgia', serif;
+  text-transform: none !important;
+  letter-spacing: 1px !important;
+  padding: 12px 20px;
+  text-align: center;
+  transition: background-color 0.2s ease;
+}
+
+.submenu-lista li:hover {
+  background-color: #f7f5f2;
+  color: #a8786a !important;
+}
+
+.titulo-seccion-contenedor {
+  display: flex;
+  justify-content: center;
+  margin: 40px auto;
+}
+
+.btn-categoria-indicador {
+  background-color: #a8786a;
+  color: white;
+  padding: 8px 25px;
+  font-family: 'Georgia', serif;
+  font-size: 20px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  min-width: 220px;
+  text-align: center;
+}
+
+.catalogo-productos-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  padding: 0 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.tarjeta-producto {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.contenedor-foto-catalogo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+}
+
+.contenedor-foto-catalogo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.btn-add-mini-carrito {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: white;
+  border: 1px solid #eaeaea;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  font-size: 16px;
+  transition: transform 0.2s ease;
+}
+
+.btn-add-mini-carrito:hover {
+  transform: scale(1.15);
+}
+
+.info-producto-home {
+  padding: 10px 5px;
+  text-align: left;
+}
+
+.info-producto-home h3 {
+  font-size: 14px;
+  margin: 5px 0 3px 0;
+  color: #333;
+  font-family: 'Georgia', serif;
+  font-weight: normal;
+}
+
+.precio-home {
+  font-size: 14px;
+  font-weight: bold;
+  color: #a8786a;
+  margin: 0;
+}
+
+.perfil-nav-contenedor {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.texto-bienvenida {
+  font-family: 'Georgia', serif;
+  font-size: 14px;
+  color: #5c3a3b;
+  font-weight: bold;
+}
+
+.btn-cerrar-sesion {
+  background: none;
+  border: 1px solid #a8786a;
+  color: #a8786a;
+  padding: 3px 8px;
+  font-size: 11px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.2s ease;
+}
+
+.btn-cerrar-sesion:hover {
+  background-color: #a8786a;
+  color: white;
+}
+.modal-detalle-producto {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+}
+
+.contenido-modal {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  max-width: 450px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  font-family: 'Georgia', serif;
 }

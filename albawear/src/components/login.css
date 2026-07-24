@@ -1,0 +1,101 @@
+/* Centra todo el login en el medio de la pantalla con un fondo suave */
+.login-principal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Ocupa todo el alto de la pantalla */
+  background-color: #f7f5f2; /* Color crema clarito para el fondo */
+  padding: 20px;
+}
+
+/* La tarjetita del login */
+.login-tarjeta {
+  background-color: white;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Sombrita muy suave */
+  width: 100%;
+  max-width: 400px; /* Para que no se estire demasiado */
+  text-align: center;
+}
+
+.login-logo-contenedor {
+  margin-bottom: 20px;
+}
+
+.login-logo {
+  max-width: 120px; /* Controla el tamaño de tu logo */
+  height: auto;
+}
+
+.login-tarjeta h2 {
+  color: #5c3a3b; /* Tu color bordó característico */
+  font-size: 24px;
+  margin-bottom: 25px;
+  font-weight: 500;
+}
+
+/* El formulario y los inputs */
+.login-formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Separa los campos entre sí */
+}
+
+.input-grupo {
+  text-align: left; /* Alinea los labels a la izquierda */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-grupo label {
+  color: #7a6e67; /* Un gris/marrón suave para las etiquetas */
+  font-size: 14px;
+}
+
+.input-grupo input {
+  padding: 12px;
+  border: 1px solid #e0dad5;
+  border-radius: 6px;
+  outline: none;
+  font-size: 15px;
+  transition: border-color 0.3s;
+}
+
+/* Efecto cuando el usuario hace clic para escribir */
+.input-grupo input:focus {
+  border-color: #5c3a3b; /* El borde se vuelve bordó */
+}
+
+/* El botón de ingresar */
+.btn-ingresar {
+  background-color: #5c3a3b; /* Fondo bordó */
+  color: white;
+  border: none;
+  padding: 14px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  margin-top: 10px;
+}
+
+/* Efecto al pasar el mouse por encima del botón */
+.btn-ingresar:hover {
+  background-color: #442a2b; /* Un bordó un toque más oscuro */
+}
+
+.login-ayuda {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #7a6e67;
+}
+
+.link-registro {
+  color: #5c3a3b;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: underline;
+}
