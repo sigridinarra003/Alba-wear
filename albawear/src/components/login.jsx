@@ -1,75 +1,86 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './login.css'; // Asegurate de tener tu archivo de estilos
 
-function Login({ alIniciarSesion, irAInicio }) {
+function Login({ irAHome, onLoginExitoso, irAregistro }) {
   const [correo, setCorreo] = useState('');
   const [contrasena, setContrasena] = useState('');
-  const [error, setError] = useState('');
+  const [errorLocal, setErrorLocal] = useState('');
 
-  const handleSubmit = (e) => {
+  const manejarSubmit = (e) => {
     e.preventDefault();
-    setError('');
+    setErrorLocal(''); // Limpiamos errores previos
 
-    // Petición al Backend en Node.js
     axios.post('http://localhost:5000/api/usuarios/login', {
       correo: correo,
       contrasena: contrasena
     })
-    .then((res) => {
-      // Si el login es exitoso
-      const usuarioLogueado = res.data.usuario;
-      
-      if (alIniciarSesion) {
-        alIniciarSesion(usuarioLogueado);
-      }
-      
-      if (irAInicio) {
-        irAInicio();
-      }
-    })
-    .catch((err) => {
-      console.error('Error en la petición de login:', err);
-      if (err.response && err.response.data && err.response.data.error) {
-        setError(err.response.data.error);
-      } else {
-        setError('No se pudo conectar con el servidor');
-      }
-    });
+      .then((res) => {
+        // 🚀 ESTA ES LA LÍNEA CLAVE
+        // Envía los datos a App.jsx, lo que dispara setPantallaActual('home') automáticamente
+        onLoginExitoso(res.data.usuario);
+      })
+      .catch((err) => {
+        console.error('Error en el login:', err);
+        // Mostramos el mensaje de error que manda Node.js (ej. "Correo incorrecto")
+        setErrorLocal(err.response?.data?.error || 'Error de conexión con el servidor');
+      });
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '40px auto', padding: '20px', textAlign: 'center' }}>
-      <h2>Iniciar Sesión</h2>
-      
-      {error && <p style={{ color: 'red', fontWeight: 'bold' }}>{error}</p>}
-
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-        <div style={{ textAlign: 'left' }}>
-          <label style={{ display: 'block', marginBottom: '5px' }}>Correo Electrónico:</label>
-          <input 
-            type="email" 
-            value={correo} 
-            onChange={(e) => setCorreo(e.target.value)} 
-            required 
-            style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
-          />
-        </div>
-
-        <div style={{ textAlign: 'left' }}>
-          <label style={{ display: 'block', marginBottom: '5px' }}>Contraseña:</label>
-          <input 
-            type="password" 
-            value={contrasena} 
-            onChange={(e) => setContrasena(e.target.value)} 
-            required 
-            style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}
-          />
-        </div>
-
-        <button type="submit" style={{ padding: '10px', cursor: 'pointer', backgroundColor: '#8c6d62', color: '#fff', border: 'none', borderRadius: '4px' }}>
-          Ingresar
+    <div className="login-principal">
+      <div className="login-caja">
+        <button
+          onClick={irAHome}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', marginBottom: '20px', textDecoration: 'underline' }}
+        >
+          ← Volver a la tienda
         </button>
-      </form>
+
+        <h2>Iniciar Sesión</h2>
+
+        {errorLocal && <p style={{ color: 'red', fontWeight: 'bold' }}>{errorLocal}</p>}
+
+        <form onSubmit={manejarSubmit}>
+          <div style={{ marginBottom: '15px' }}>
+            <label>Correo Electrónico:</label>
+            <input
+              type="email"
+              value={correo}
+              onChange={(e) => setCorreo(e.target.value)}
+              required
+              style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+            />
+          </div>
+
+          <div style={{ marginBottom: '20px' }}>
+            <label>Contraseña:</label>
+            <input
+              type="password"
+              value={contrasena}
+              onChange={(e) => setContrasena(e.target.value)}
+              required
+              style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+            />
+          </div>
+
+          <button type="submit" className="btn-compra" style={{ width: '100%' }}>
+            Ingresar
+          </button>
+        </form>
+
+        <div style={{ textAlign: 'center', marginTop: '15px' }}>
+          <span>¿No tenés cuenta? </span>
+          <button
+            type="button"
+            onClick={irAregistro}
+            style={{ background: 'none', border: 'none', color: '#5c3a3b', fontWeight: 'bold', cursor: 'pointer', textDecoration: 'underline' }}
+          >
+            Registrate acá
+          </button>
+        </div>
+
+      </div>
     </div>
   );
 }
