@@ -14,18 +14,19 @@ nav {
   justify-content: center;
 }
 
-h1 {
+ .titulo-PD {
   display: flex;
   color: white;
   justify-content: center;
   font-size: 24px;
   font-family: 'Georgia', serif;
-  background-color: #a8786a;
+  background-color: #f8ad9d;
   letter-spacing: 3px;
   cursor: pointer;
   padding: 5px 5px;
-  width: 360px;
+  width: 390px;
   margin: 40px auto;
+  text-transform: uppercase;
 }
 
 .lista {
@@ -35,8 +36,8 @@ h1 {
   margin-top: 20px;
   padding: 30px 0;
   gap: 60px;
-  background-color: #a8786a;
-  width: 80%;
+  background-color: #f8ad9d;
+  width: 85%;
   list-style: none;
 }
 
@@ -50,15 +51,44 @@ h1 {
 }
 
 .lista li:hover {
-  color: #f3e5ab;
-  transition: 0.3s;
+  color: #000000;
+  transition: 0.5s;
 }
+
+.banner-promocional {
+  background-Color: transparent; 
+  color: #000;
+  text-align: center;
+  padding: 8px;
+  font-size: 14px;
+  font-Weight: bold;
+  letter-Spacing: 0.5px;
+}
+
+
+.barra-busqueda {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* Asegura que el contenedor ocupe todo el ancho para centrarlo */
+  margin: 15px 0;
+}
+
+.contenedor-buscador {
+  border-radius: 20px; /* Sintaxis estándar CSS en minúsculas */
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 14px;
+  width: 250px;
+  padding: 8px 16px; /* Sin comillas ni comas */
+}
+
 
 /* FONDO */
 
 .fondo {
   height: 300px;
-  background-image: url("/img/fondo2.png");
+  background-color: #ffdab9;
   background-size: cover;
   background-position: center;
   position: relative;
@@ -75,7 +105,6 @@ h1 {
 /* ========================= */
 /* CARRUSEL BOOTSTRAP */
 /* ========================= */
-
 .carrusel-wrapper {
   width: 100vw;
   margin: 0;
@@ -100,8 +129,14 @@ h1 {
   display: block;
 }
 
-/* FLECHAS */
+/* Ajuste responsivo para celulares */
+@media (max-width: 768px) {
+  .carousel-item img {
+    height: 350px;
+  }
+}
 
+/* FLECHAS */
 .carousel-control-prev,
 .carousel-control-next {
   width: 8%;
@@ -113,39 +148,45 @@ h1 {
   height: 45px;
 }
 
-
 /* --- ESTILOS PARA LAS FOTOS DESTACADAS --- */
 .p-destacados {
-  display: grid;
+  display: flex;
   grid-template-columns: repeat(2, 1fr);
   gap: 15px;
   padding: 20px;
-  max-width: 600px;
+
   margin: 0 auto;
 }
-
+.p-destacados p{
+  color: #fb6f92;
+  font-weight:bold;
+}
+.p-destacados h3{
+  margin-top: 10px; 
+  font-size: 16px; 
+  color: #000000;
+  text-align: center;
+}
 .p-destacados img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 8px;
-  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 4px 10px (0, 0, 0, 0.1);
 }
 
 /* --- ESTILOS PARA EL PIE DE PÁGINA --- */
 .pie-pagina {
-  background-image: url('/img/fondo2.png');
-  background-color: #e5dfd9;
+  background-color: #ffdab9;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 40px 20px;
   margin-top: 50px;
-  color: #5c3a3b;
 }
 
 .footer-columna {
   text-align: center;
+
 }
 
 .footer-columna h4 {
@@ -157,10 +198,10 @@ h1 {
 .footer-columna p {
   font-size: 14px;
   margin: 0;
+  color: #000;
 }
 
 .caja-redes {
-  background-color: #5c3a3b;
   padding: 8px 15px;
   border-radius: 4px;
   display: flex;
@@ -172,7 +213,7 @@ h1 {
 
 /* Evita que se desacomode la barra nav en pantallas chicas */
 nav {
-  background-color: #fff; 
+  background-color: #fff;
 }
 
 /* Esto engloba la barra y sirve de base para ubicar las herramientas de la derecha */
@@ -184,11 +225,15 @@ nav {
 /* NUEVA CAJA QUE UNE LOGIN Y CARRITO EN LA ZONA BLANCA */
 .iconos-derecha-nav {
   position: absolute;
-  right: 40px;          /* Separación del borde derecho de la pantalla */
-  top: 50%;             /* Lo baja a la mitad de la barra */
-  transform: translateY(-25%); /* Alineación vertical fina con el texto */
+  right: 40px;
+  /* Separación del borde derecho de la pantalla */
+  top: 50%;
+  /* Lo baja a la mitad de la barra */
+  transform: translateY(-110%);
+  /* Alineación vertical fina con el texto */
   display: flex;
-  gap: 20px;            /* Espacio de separación entre el ícono de login y el de carrito */
+  gap: 20px;
+  /* Espacio de separación entre el ícono de login y el de carrito */
   align-items: center;
 }
 
@@ -196,7 +241,8 @@ nav {
 .btn-nav-icono {
   background: none;
   border: none;
-  font-size: 26px;      /* Mantiene la escala de tu diseño original */
+  font-size: 26px;
+  /* Mantiene la escala de tu diseño original */
   cursor: pointer;
   transition: transform 0.2s ease;
   padding: 0;
@@ -206,7 +252,8 @@ nav {
 }
 
 .btn-nav-icono:hover {
-  transform: scale(1.18); /* Efecto pop sutil al pasar el mouse por encima */
+  transform: scale(1.18);
+  /* Efecto pop sutil al pasar el mouse por encima */
 }
 
 
@@ -257,7 +304,7 @@ nav {
 }
 
 .btn-categoria-indicador {
-  background-color: #a8786a;
+  background-color: #f8ad9d;
   color: white;
   padding: 8px 25px;
   font-family: 'Georgia', serif;
@@ -336,7 +383,7 @@ nav {
 .precio-home {
   font-size: 14px;
   font-weight: bold;
-  color: #a8786a;
+  color: #ff8fab;
   margin: 0;
 }
 
@@ -369,6 +416,7 @@ nav {
   background-color: #a8786a;
   color: white;
 }
+
 .modal-detalle-producto {
   position: fixed;
   top: 0;
@@ -391,4 +439,9 @@ nav {
   text-align: center;
   position: relative;
   font-family: 'Georgia', serif;
+}
+.logo-fotter{
+  width: 200px;
+ height: auto; 
+ margin-right: 138px; 
 }

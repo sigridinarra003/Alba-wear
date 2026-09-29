@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh; /* Ocupa todo el alto de la pantalla */
-  background-color: #f7f5f2; /* Color crema clarito para el fondo */
+  background-color: #f8ad9d; /* Color crema clarito para el fondo */
   padding: 20px;
 }
 
@@ -18,7 +18,9 @@
   max-width: 400px; /* Para que no se estire demasiado */
   text-align: center;
 }
-
+h2{
+  color: #a8786a;
+}
 .login-logo-contenedor {
   margin-bottom: 20px;
 }
@@ -86,7 +88,9 @@
 .btn-ingresar:hover {
   background-color: #442a2b; /* Un bordó un toque más oscuro */
 }
-
+.btn-compra{
+  background-color: #f8ad9d ;
+}
 .login-ayuda {
   margin-top: 20px;
   font-size: 14px;

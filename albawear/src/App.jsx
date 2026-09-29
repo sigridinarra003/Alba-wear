@@ -1,36 +1,46 @@
 import { useState } from 'react';
-import Home from './components/Home'; 
+import Home from './components/home'; 
 import Carrito from './components/carrito'; 
 import Login from './components/Login'; 
 import Registro from './components/registro';
-
+import Dashboard from './components/dashboard'; // Ajustá la ruta si tu Dashboard está en otra carpeta
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import 'bootstrap/dist/css/bootstrap.min.css';
 function App() {
   const [pantallaActual, setPantallaActual] = useState('home');
   
-  // NUEVO ESTADO: Guarda la info del usuario cuando se loguea (empieza en null)
+  // Estado del usuario logueado
   const [usuarioLogueado, setUsuarioLogueado] = useState(null);
   const [carrito, setCarrito] = useState([]);
 
+  // Funciones de navegación
   const irACarrito = () => setPantallaActual('carrito');
   const irALogin = () => setPantallaActual('login');
   const irAHome = () => setPantallaActual('home');
   const irAregistro = () => setPantallaActual('registro');
-  // FUNCIÓN PARA EL LOGIN: Guarda el usuario y te manda directo al Home
+  const irADashboard = () => setPantallaActual('dashboard');
+
+  // Función de inicio de sesión
   const manejarInicioSesion = (datosDelUsuario) => {
-    setUsuarioLogueado(datosDelUsuario); // Guardamos su nombre, mail, etc.
-    setPantallaActual('home'); // Nos devuelve automáticamente al Home
+    setUsuarioLogueado(datosDelUsuario);
+    // Si el usuario es admin, lo podemos redirigir directo al dashboard
+    if (datosDelUsuario?.rol === 'admin') {
+      setPantallaActual('dashboard');
+    } else {
+      setPantallaActual('home');
+    }
   };
 
-  // FUNCIÓN PARA CERRAR SESIÓN: Limpia el usuario
+  // Función de cierre de sesión
   const manejarCerrarSesion = () => {
     setUsuarioLogueado(null);
+    setPantallaActual('home');
   };
     
- // ==========================================
-  // 🛍️ FUNCIONES DEL CARRITO (ACTUALIZADAS CON TALLES)
+  // ==========================================
+  // 🛍️ FUNCIONES DEL CARRITO
   // ==========================================
 
-  // 1. Agregar producto al carrito evaluando id y talle seleccionado
   const agregarAlCarrito = (productoNuevo) => {
     setCarrito((prevCarrito) => {
       const indexExistente = prevCarrito.findIndex(
@@ -49,7 +59,6 @@ function App() {
     });
   };
 
-  // 2. Modificar cantidad (+ / -) dentro del carrito filtrando por producto y talle
   const modificarCantidad = (id_producto, talleElegido, accion) => {
     setCarrito((prevCarrito) =>
       prevCarrito.map((item) => {
@@ -65,7 +74,6 @@ function App() {
     );
   };
 
-  // 3. Eliminar producto individual del carrito según su id y talle exacto
   const eliminarProducto = (id_producto, talleElegido) => {
     setCarrito((prevCarrito) =>
       prevCarrito.filter(
@@ -74,15 +82,14 @@ function App() {
     );
   };
 
-
-
   return (
     <div className="app-container">
-      {/* Al Home le pasamos el usuario actual y la función de cerrar sesión */}
+      {/* 🏠 VISTA HOME */}
       {pantallaActual === 'home' && (
         <Home 
           irACarrito={irACarrito} 
           irALogin={irALogin} 
+          irADashboard={irADashboard}
           usuario={usuarioLogueado}
           cerrarSesion={manejarCerrarSesion}
           agregarAlCarrito={agregarAlCarrito}
@@ -90,24 +97,43 @@ function App() {
         />
       )}
       
+      {/* 🛒 VISTA CARRITO */}
       {pantallaActual === 'carrito' && (
-      <Carrito  
-      carrito={carrito}
-      modificarCantidad={modificarCantidad}
-      eliminarProducto={eliminarProducto}
-      irAHome={irAHome} 
-      />
+        <Carrito  
+          carrito={carrito}
+          modificarCantidad={modificarCantidad}
+          eliminarProducto={eliminarProducto}
+          irAHome={irAHome} 
+        />
       )}
-         
-      {/* Al Login le pasamos la función que se ejecuta cuando el usuario se registra o ingresa */}
+          
+      {/* 🔐 VISTA LOGIN */}
       {pantallaActual === 'login' && (
         <Login irAHome={irAHome} onLoginExitoso={manejarInicioSesion} irAregistro={irAregistro} />
       )}
 
-      {/* NUEVA VISTA DE REGISTRO */}
+      {/* 📝 VISTA REGISTRO */}
       {pantallaActual === 'registro' && (
         <Registro irAHome={irAHome} irALogin={irALogin} />
-)}
+      )}
+
+      {/* 📊 VISTA DASHBOARD (PROTEGIDA SOLO PARA ADMIN) */}
+      {pantallaActual === 'dashboard' && (
+        usuarioLogueado?.rol === 'admin' ? (
+          <Dashboard usuario={usuarioLogueado} irAHome={irAHome} />
+        ) : (
+          /* Si intenta entrar alguien que no es admin, renderiza Home */
+          <Home 
+            irACarrito={irACarrito} 
+            irALogin={irALogin} 
+            irADashboard={irADashboard}
+            usuario={usuarioLogueado}
+            cerrarSesion={manejarCerrarSesion}
+            agregarAlCarrito={agregarAlCarrito}
+            totalItemsCarrito={carrito.reduce((acc, item) => acc + item.cantidad, 0)}
+          />
+        )
+      )}
     </div>
   );
 }
