@@ -317,10 +317,10 @@ nav {
 
 .catalogo-productos-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
-  padding: 0 20px;
-  max-width: 600px;
+  padding: 0 40px;
+  max-width: 1300px;
   margin: 0 auto;
 }
 
@@ -335,7 +335,27 @@ nav {
 .contenedor-foto-catalogo {
   position: relative;
   width: 100%;
-  aspect-ratio: 3 / 4;
+  height: 320px; 
+}
+
+.contenedor-foto-catalogo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* Ajuste responsivo para tablets y celulares (pasa a 2 columnas o 1 según la pantalla) */
+@media (max-width: 1024px) {
+  .catalogo-productos-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .catalogo-productos-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .contenedor-foto-catalogo img {
