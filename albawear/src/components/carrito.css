@@ -1,173 +1,372 @@
+/* Layout General Pantalla Completa */
 .carrito-principal {
   background-color: #f7f5f2;
   min-height: 100vh;
-  padding: 20px;
+  padding: 30px 40px;
   display: flex;
   justify-content: center;
+  align-items: flex-start;
+  font-family: 'Georgia', serif;
+  box-sizing: border-box;
 }
 
 .carrito-contenedor {
   width: 100%;
-  max-width: 500px; /* Estilo formato celular/móvil como tu foto */
+  max-width: 1200px; /* Expande a ancho completo de escritorio */
   background-color: white;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
   border-radius: 8px;
   overflow: hidden;
 }
 
 .carrito-header {
-  background-image: url('/img/fondo-header.png'); /* Tu textura de onditas */
-  background-color: #e5dfd9; 
-  padding: 30px 20px;
+  background-color: #a8786a;
+  padding: 25px 30px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-volver-tienda {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.btn-volver-tienda:hover {
+  background-color: white;
   color: #5c3a3b;
 }
 
 .carrito-header h1 {
   margin: 0;
-  font-size: 28px;
+  font-size: 24px;
   font-weight: normal;
+  letter-spacing: 1px;
 }
 
+/* Estructura en Dos Columnas */
+.carrito-cuerpo {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 30px;
+  padding: 30px;
+}
+
+/* Columna Izquierda: Lista de Productos */
 .carrito-lista {
-  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-}
-
-/* Tarjeta de cada producto (Borde gris fino de tu diseño) */
-.carrito-item {
-  border: 1px solid #e0dad5;
-  padding: 15px;
-  border-radius: 4px;
-  display: grid;
-  grid-template-columns: 120px 1fr;
   gap: 15px;
 }
 
-/* El recuadro azul que se ve en tu primera foto cuando seleccionás el item */
-.carrito-item:first-child {
-  border: 2px solid #0088ff; 
+.carrito-item {
+  border: 1px solid #e5dfd9;
+  padding: 18px;
+  border-radius: 6px;
+  display: grid;
+  grid-template-columns: 100px 1fr auto;
+  gap: 20px;
+  align-items: center;
+  background-color: #faf8f5;
+  transition: border-color 0.2s ease;
+}
+
+.carrito-item:hover {
+  border-color: #a8786a;
 }
 
 .item-foto img {
-  width: 100%;
-  height: 140px;
+  width: 100px;
+  height: 120px;
   object-fit: cover;
   border-radius: 4px;
 }
 
-.item-detalles {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
 .item-detalles h3 {
-  margin: 0;
+  margin: 0 0 6px 0;
   font-size: 16px;
   color: #333;
 }
 
-.item-talles {
+.item-talle {
   font-size: 13px;
-  color: #7a6e67;
-  margin: 5px 0;
+  color: #5c3a3b;
+  font-weight: bold;
+  margin-bottom: 8px;
 }
 
-.item-controles {
+.item-descripcion {
+  font-size: 12px;
+  color: #777;
+  margin: 0;
+  max-width: 450px;
+  line-height: 1.4;
+}
+
+.item-acciones {
   display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
+  height: 100%;
 }
 
-/* El contador - 1 + */
+.btn-eliminar {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.btn-eliminar:hover {
+  opacity: 1;
+}
+
 .contador {
   display: flex;
   align-items: center;
-  background-color: #e0dad5;
+  background-color: #e5dfd9;
   border-radius: 4px;
   overflow: hidden;
+  margin-top: 10px;
 }
 
 .contador button {
   background: none;
   border: none;
-  padding: 5px 10px;
+  padding: 6px 12px;
   cursor: pointer;
   font-weight: bold;
   color: #5c3a3b;
+  font-size: 14px;
 }
 
 .contador span {
-  padding: 0 10px;
+  padding: 0 12px;
   font-size: 14px;
+  font-weight: bold;
 }
 
 .item-precio {
   font-weight: bold;
   color: #333;
-  font-size: 15px;
+  font-size: 16px;
+  margin-top: 10px;
 }
 
-/* Descripción abajo de la foto */
-.item-descripcion {
-  grid-column: span 2;
-  font-size: 11px;
-  color: #666;
-  line-height: 1.4;
-  margin: 5px 0 0 0;
-  text-align: justify;
-}
-
-/* Sección del Resumen de Pago */
+/* Columna Derecha: Resumen de Pago */
 .carrito-resumen {
-  padding: 20px;
-  border-top: 1px solid #e0dad5;
+  background-color: #faf8f5;
+  padding: 25px;
+  border-radius: 6px;
+  border: 1px solid #e5dfd9;
+  height: fit-content;
+}
+
+.carrito-resumen h2 {
+  font-size: 18px;
+  color: #5c3a3b;
+  margin-top: 0;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e5dfd9;
+  padding-bottom: 10px;
 }
 
 .envio-aviso {
-  color: #b86266; /* Color rosa/bordó del envío gratis */
-  font-size: 13px;
+  background-color: #f3ece7;
+  color: #5c3a3b;
+  font-size: 12px;
+  padding: 10px;
+  border-radius: 4px;
   text-align: center;
   margin-bottom: 20px;
+  font-weight: bold;
 }
 
 .resumen-linea {
   display: flex;
   justify-content: space-between;
-  color: #666;
+  color: #555;
   font-size: 14px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .resumen-linea.total {
   font-size: 20px;
-  color: #000;
+  color: #222;
   font-weight: bold;
-  margin-top: 10px;
-}
-
-.cuotas-aviso {
-  color: #b86266;
-  font-size: 13px;
-  margin: 15px 0;
+  margin-top: 15px;
+  border-top: 2px solid #a8786a;
+  padding-top: 15px;
 }
 
 .btn-compra {
   width: 100%;
-  background-color: #d1cbd4; /* El gris clarito de tu botón */
-  color: #333;
+  background-color: #5c3a3b;
+  color: white;
   border: none;
-  padding: 12px;
+  padding: 14px;
   font-size: 15px;
   font-weight: bold;
   border-radius: 4px;
   cursor: pointer;
   text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 20px;
+  transition: background-color 0.2s ease;
 }
 
 .btn-compra:hover {
-  background-color: #bdbaaf;
+  background-color: #a8786a;
+}
+
+/* Estilos de Pasarela / Simulación de Pago */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-pago {
+  background: white;
+  width: 100%;
+  max-width: 550px;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #5c3a3b;
+}
+
+.btn-cerrar-modal {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #888;
+}
+
+.form-grupo {
+  margin-bottom: 15px;
+}
+
+.form-grupo label {
+  display: block;
+  font-size: 13px;
+  font-weight: bold;
+  color: #444;
+  margin-bottom: 5px;
+}
+
+.form-grupo input, .form-grupo select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-radius;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+}
+
+.metodos-pago {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.btn-metodo {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.btn-metodo.activo {
+  border-color: #5c3a3b;
+  background-color: #5c3a3b;
+  color: white;
+}
+
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #5c3a3b;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.comprobante-exito {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.icono-exito {
+  font-size: 50px;
+  color: #28a745;
+  margin-bottom: 10px;
+}
+
+/* Responsivo */
+@media (max-width: 900px) {
+  .carrito-cuerpo {
+    grid-template-columns: 1fr;
+  }
+  
+  .carrito-item {
+    grid-template-columns: 80px 1fr;
+  }
+
+  .item-acciones {
+    grid-column: span 2;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+  }
 }

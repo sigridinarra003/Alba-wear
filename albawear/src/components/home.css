@@ -37,7 +37,7 @@ nav {
   padding: 30px 0;
   gap: 60px;
   background-color: #f8ad9d;
-  width: 85%;
+  width: 98%;
   list-style: none;
 }
 
@@ -226,34 +226,41 @@ nav {
 .iconos-derecha-nav {
   position: absolute;
   right: 40px;
-  /* Separación del borde derecho de la pantalla */
   top: 50%;
-  /* Lo baja a la mitad de la barra */
-  transform: translateY(-110%);
-  /* Alineación vertical fina con el texto */
-  display: flex;
-  gap: 20px;
-  /* Espacio de separación entre el ícono de login y el de carrito */
-  align-items: center;
+  transform: translateY(-50%);
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 15px;
+  white-space: nowrap;
+  z-index: 10;
 }
 
-/* Ajuste general para los botones del login y del carrito */
-.btn-nav-icono {
-  background: none;
-  border: none;
-  font-size: 26px;
-  /* Mantiene la escala de tu diseño original */
-  cursor: pointer;
-  transition: transform 0.2s ease;
-  padding: 0;
-  display: flex;
+.iconos-derecha-nav button {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
+  margin: 0;
 }
 
-.btn-nav-icono:hover {
-  transform: scale(1.18);
-  /* Efecto pop sutil al pasar el mouse por encima */
+.perfil-nav-contenedor {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  
+}
+
+.btn-nav-icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 22px;
 }
 
 
@@ -422,8 +429,8 @@ nav {
 
 .btn-cerrar-sesion {
   background: none;
-  border: 1px solid #a8786a;
-  color: #a8786a;
+  border: 1px solid #000;
+  color: #070707;
   padding: 3px 8px;
   font-size: 11px;
   cursor: pointer;

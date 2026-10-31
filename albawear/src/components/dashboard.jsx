@@ -14,6 +14,7 @@ function Dashboard({ usuario, irAHome }) {
   const [idCategoria, setIdCategoria] = useState('1');
   const [esDestacado, setEsDestacado] = useState(false);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const [busquedaAdmin, setBusquedaAdmin] = useState('');
 
   // Traer lista de productos
   const obtenerProductos = () => {
@@ -136,10 +137,15 @@ function Dashboard({ usuario, irAHome }) {
       });
   };
 
+  // Filtrar productos en el panel admin por nombre
+  const productosFiltradosAdmin = productosBD.filter((prod) =>
+    prod.nombre?.toLowerCase().includes(busquedaAdmin.toLowerCase())
+  );
+
   return (
     <div style={{ padding: '30px', maxWidth: '1000px', margin: '0 auto', textAlign: 'left' }}>
-      <button 
-        onClick={irAHome} 
+      <button
+        onClick={irAHome}
         style={{ padding: '8px 15px', cursor: 'pointer', marginBottom: '20px', backgroundColor: '#f0f0f0', border: '1px solid #ccc', borderRadius: '4px' }}
       >
         ← Volver a la Tienda
@@ -147,11 +153,11 @@ function Dashboard({ usuario, irAHome }) {
 
       <h2>Panel de Administración </h2>
 
-      <button 
+      <button
         onClick={() => {
           if (mostrarFormulario) limpiarFormulario();
           else setMostrarFormulario(true);
-        }} 
+        }}
         style={{ padding: '10px 15px', backgroundColor: '#5c3a3b', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', marginBottom: '20px' }}
       >
         {mostrarFormulario ? 'Cancelar' : '+ Agregar Nuevo Producto'}
@@ -161,7 +167,7 @@ function Dashboard({ usuario, irAHome }) {
       {mostrarFormulario && (
         <form onSubmit={manejarGuardarProducto} style={{ background: '#f8f9fa', border: '1px solid #ccc', padding: '20px', borderRadius: '8px', marginBottom: '30px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <h3>{idEditando ? `Editando Producto #${idEditando}` : 'Nuevo Producto'}</h3>
-          
+
           <div>
             <label style={{ fontWeight: 'bold', display: 'block' }}>Nombre del producto:</label>
             <input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} required style={{ width: '100%', padding: '8px' }} />
@@ -192,11 +198,11 @@ function Dashboard({ usuario, irAHome }) {
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <input 
-              type="checkbox" 
-              id="chkDestacado" 
-              checked={esDestacado} 
-              onChange={(e) => setEsDestacado(e.target.checked)} 
+            <input
+              type="checkbox"
+              id="chkDestacado"
+              checked={esDestacado}
+              onChange={(e) => setEsDestacado(e.target.checked)}
             />
             <label htmlFor="chkDestacado" style={{ fontWeight: 'bold', cursor: 'pointer' }}>
               Mostrar en "Productos Destacados" de la página principal ⭐
@@ -208,6 +214,23 @@ function Dashboard({ usuario, irAHome }) {
           </button>
         </form>
       )}
+
+
+      {/*BARRA DE BÚSQUEDA PARA EL ADMIN */}
+      <div className="mb-4" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '15px' }}>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Buscar producto por nombre..."
+          value={busquedaAdmin}
+          onChange={(e) => setBusquedaAdmin(e.target.value)}
+          style={{ maxWidth: '350px', padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }}
+        />
+        <span style={{ color: '#666', fontSize: '14px' }}>
+          Mostrando {productosFiltradosAdmin.length} de {productosBD.length} productos
+        </span>
+      </div>
+
 
       {/* Tabla de Productos */}
       <h3>Inventario de Productos</h3>
@@ -226,43 +249,56 @@ function Dashboard({ usuario, irAHome }) {
             </tr>
           </thead>
           <tbody>
-            {productosBD.map((prod) => (
-              <tr key={prod.id_producto} style={{ borderBottom: '1px solid #ddd' }}>
-                <td style={{ padding: '10px' }}>{prod.id_producto}</td>
-                <td style={{ padding: '10px' }}>
-                  <img src={prod.imagen || '/img/placeholder.jpg'} alt={prod.nombre} width="40" height="40" style={{ objectFit: 'cover', borderRadius: '4px' }} />
-                </td>
-                <td style={{ padding: '10px' }}>{prod.nombre}</td>
-                <td style={{ padding: '10px' }}>${Number(prod.precio).toLocaleString('es-AR')}</td>
-                
-                {/* Botón rápido para alternar destacado */}
-                <td style={{ padding: '10px' }}>
-                  <button 
-                    onClick={() => alternarDestacado(prod)} 
-                    style={{ background: 'none', border: '1px solid #ccc', borderRadius: '4px', cursor: 'pointer', padding: '4px 8px' }}
-                    title="Hacé clic para cambiar estado destacado"
-                  >
-                    {prod.es_destacado ? '⭐ Sí' : '☆ No'}
-                  </button>
-                </td>
-
-                <td style={{ padding: '10px', display: 'flex', gap: '8px' }}>
-                  <button 
-                    onClick={() => prepararEdicion(prod)} 
-                    style={{ backgroundColor: '#72552b', color: 'white', border: 'none', padding: '6px 10px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
-                  >
-                    <img src="data:image/svg+xml,%3csvg width='24' height='24' fill='%23fcf7f7' viewBox='0 0 24 24' transform='' xmlns='http://www.w3.org/2000/svg'%3e%3c!--Boxicons v3.0.8 https://boxicons.com %7c License https://docs.boxicons.com/free--%3e%3cpath d='M3.38 15.95c-.13.13-.22.29-.26.46l-1.08 4.34c-.09.34.01.7.26.95.19.19.45.29.71.29.08 0 .16 0 .24-.03l4.34-1.09c.18-.04.34-.13.46-.26L18.2 10.46l-4.67-4.67zM19.67 2.61c-.81-.81-2.14-.81-2.95 0l-1.78 1.78 4.67 4.67 1.78-1.78c.81-.81.81-2.13 0-2.95z'%3e%3c/path%3e%3c/svg%3e" alt="" /> Editar
-                  </button>
-
-                  <button 
-                    onClick={() => eliminarProductoBD(prod.id_producto)} 
-                    style={{ backgroundColor: '#ff0800', color: 'white', border: 'none', padding: '6px 10px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
-                  >
-                    <img src="data:image/svg+xml,%3csvg width='24' height='24' fill='%23fcf7f7' viewBox='0 0 24 24' transform='' xmlns='http://www.w3.org/2000/svg'%3e%3c!--Boxicons v3.0.8 https://boxicons.com %7c License https://docs.boxicons.com/free--%3e%3cpath d='M17 6V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v2H2v2h2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8h2V6zM9 4h6v2H9zm1 14H8v-8h2zm6 0h-2v-8h2z'%3e%3c/path%3e%3c/svg%3e" alt="" />
-                  </button>
+            {/* Filtramos el array antes de mapearlo */}
+            {productosBD
+              .filter((prod) => prod.nombre?.toLowerCase().includes(busquedaAdmin.toLowerCase()))
+              .length === 0 ? (
+              <tr>
+                <td colSpan="6" style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
+                  No se encontró ningún producto que coincida con la búsqueda.
                 </td>
               </tr>
-            ))}
+            ) : (
+              productosBD
+                .filter((prod) => prod.nombre?.toLowerCase().includes(busquedaAdmin.toLowerCase()))
+                .map((prod) => (
+                  <tr key={prod.id_producto} style={{ borderBottom: '1px solid #ddd' }}>
+                    <td style={{ padding: '10px' }}>{prod.id_producto}</td>
+                    <td style={{ padding: '10px' }}>
+                      <img src={prod.imagen || '/img/placeholder.jpg'} alt={prod.nombre} width="40" height="40" style={{ objectFit: 'cover', borderRadius: '4px' }} />
+                    </td>
+                    <td style={{ padding: '10px' }}>{prod.nombre}</td>
+                    <td style={{ padding: '10px' }}>${Number(prod.precio).toLocaleString('es-AR')}</td>
+
+                    {/* Botón rápido para alternar destacado */}
+                    <td style={{ padding: '10px' }}>
+                      <button
+                        onClick={() => alternarDestacado(prod)}
+                        style={{ background: 'none', border: '1px solid #ccc', borderRadius: '4px', cursor: 'pointer', padding: '4px 8px' }}
+                        title="Hacé clic para cambiar estado destacado"
+                      >
+                        {prod.es_destacado ? '⭐ Sí' : '☆ No'}
+                      </button>
+                    </td>
+
+                    <td style={{ padding: '10px', display: 'flex', gap: '8px' }}>
+                      <button
+                        onClick={() => prepararEdicion(prod)}
+                        style={{ backgroundColor: '#72552b', color: 'white', border: 'none', padding: '6px 10px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+                      >
+                        <img src="data:image/svg+xml,%3csvg width='24' height='24' fill='%23fcf7f7' viewBox='0 0 24 24' transform='' xmlns='http://www.w3.org/2000/svg'%3e%3c!--Boxicons v3.0.8 https://boxicons.com %7c License https://docs.boxicons.com/free--%3e%3cpath d='M3.38 15.95c-.13.13-.22.29-.26.46l-1.08 4.34c-.09.34.01.7.26.95.19.19.45.29.71.29.08 0 .16 0 .24-.03l4.34-1.09c.18-.04.34-.13.46-.26L18.2 10.46l-4.67-4.67zM19.67 2.61c-.81-.81-2.14-.81-2.95 0l-1.78 1.78 4.67 4.67 1.78-1.78c.81-.81.81-2.13 0-2.95z'%3e%3c/path%3e%3c/svg%3e" alt="" /> Editar
+                      </button>
+
+                      <button
+                        onClick={() => eliminarProductoBD(prod.id_producto)}
+                        style={{ backgroundColor: '#ff0800', color: 'white', border: 'none', padding: '6px 10px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
+                      >
+                        <img src="data:image/svg+xml,%3csvg width='24' height='24' fill='%23fcf7f7' viewBox='0 0 24 24' transform='' xmlns='http://www.w3.org/2000/svg'%3e%3c!--Boxicons v3.0.8 https://boxicons.com %7c License https://docs.boxicons.com/free--%3e%3cpath d='M17 6V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v2H2v2h2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8h2V6zM9 4h6v2H9zm1 14H8v-8h2zm6 0h-2v-8h2z'%3e%3c/path%3e%3c/svg%3e" alt="" />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+            )}
           </tbody>
         </table>
       )}
