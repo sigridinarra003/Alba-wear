@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Home from './components/home'; 
 import Carrito from './components/carrito'; 
 import Login from './components/Login'; 
@@ -6,12 +6,25 @@ import Registro from './components/registro';
 import Dashboard from './components/dashboard'; // Ajustá la ruta si tu Dashboard está en otra carpeta
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 function App() {
   const [pantallaActual, setPantallaActual] = useState('home');
   
-  // Estado del usuario logueado
-  const [usuarioLogueado, setUsuarioLogueado] = useState(null);
-  const [carrito, setCarrito] = useState([]);
+  // 👤 Estado del usuario logueado cargado desde localStorage
+  const [usuarioLogueado, setUsuarioLogueado] = useState(() => {
+    const usuarioGuardado = localStorage.getItem('alba_usuario');
+    return usuarioGuardado ? JSON.parse(usuarioGuardado) : null;
+  });
+
+  // 🛒 Estado del carrito cargado desde localStorage
+  const [carrito, setCarrito] = useState(() => {
+    const carritoGuardado = localStorage.getItem('alba_carrito');
+    return carritoGuardado ? JSON.parse(carritoGuardado) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('alba_carrito', JSON.stringify(carrito));
+  }, [carrito]);
 
   // Funciones de navegación
   const irACarrito = () => setPantallaActual('carrito');
@@ -20,9 +33,11 @@ function App() {
   const irAregistro = () => setPantallaActual('registro');
   const irADashboard = () => setPantallaActual('dashboard');
 
-  // Función de inicio de sesión
+  // 🔑 Función de inicio de sesión con persistencia
   const manejarInicioSesion = (datosDelUsuario) => {
     setUsuarioLogueado(datosDelUsuario);
+    localStorage.setItem('alba_usuario', JSON.stringify(datosDelUsuario));
+
     // Si el usuario es admin, lo podemos redirigir directo al dashboard
     if (datosDelUsuario?.rol === 'admin') {
       setPantallaActual('dashboard');
@@ -31,9 +46,10 @@ function App() {
     }
   };
 
-  // Función de cierre de sesión
+  // 🚪 Función de cierre de sesión eliminando el localStorage
   const manejarCerrarSesion = () => {
     setUsuarioLogueado(null);
+    localStorage.removeItem('alba_usuario');
     setPantallaActual('home');
   };
     

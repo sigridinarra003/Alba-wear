@@ -205,7 +205,7 @@ function Dashboard({ usuario, irAHome }) {
               onChange={(e) => setEsDestacado(e.target.checked)}
             />
             <label htmlFor="chkDestacado" style={{ fontWeight: 'bold', cursor: 'pointer' }}>
-              Mostrar en "Productos Destacados" de la página principal ⭐
+              Mostrar en "Productos Destacados" de la página principal 
             </label>
           </div>
 
