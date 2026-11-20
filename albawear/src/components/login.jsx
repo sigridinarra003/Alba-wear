@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './login.css'; // Asegurate de tener tu archivo de estilos
 
-function Login({ irAHome, onLoginExitoso, irAregistro }) {
+function Login({ onLoginExitoso }) {
+  const navigate = useNavigate();
   const [correo, setCorreo] = useState('');
   const [contrasena, setContrasena] = useState('');
   const [errorLocal, setErrorLocal] = useState('');
@@ -16,13 +18,18 @@ function Login({ irAHome, onLoginExitoso, irAregistro }) {
       contrasena: contrasena
     })
       .then((res) => {
-        // 🚀 ESTA ES LA LÍNEA CLAVE
-        // Envía los datos a App.jsx, lo que dispara setPantallaActual('home') automáticamente
-        onLoginExitoso(res.data.usuario);
+        const usuario = res.data.usuario;
+        onLoginExitoso(usuario);
+
+        // Redirección basada en rol usando React Router
+        if (usuario?.rol === 'admin') {
+          navigate('/dashboard');
+        } else {
+          navigate('/');
+        }
       })
       .catch((err) => {
         console.error('Error en el login:', err);
-        // Mostramos el mensaje de error que manda Node.js (ej. "Correo incorrecto")
         setErrorLocal(err.response?.data?.error || 'Error de conexión con el servidor');
       });
   };
@@ -31,7 +38,7 @@ function Login({ irAHome, onLoginExitoso, irAregistro }) {
     <div className="login-principal">
       <div className="login-caja">
         <button
-          onClick={irAHome}
+          onClick={() => navigate('/')}
           style={{ background: 'none', border: 'none', cursor: 'pointer', marginBottom: '20px', textDecoration: 'underline' }}
         >
           ← Volver a la tienda
@@ -73,7 +80,7 @@ function Login({ irAHome, onLoginExitoso, irAregistro }) {
           <span>¿No tenés cuenta? </span>
           <button
             type="button"
-            onClick={irAregistro}
+            onClick={() => navigate('/registro')}
             style={{ background: 'none', border: 'none', color: '#5c3a3b', fontWeight: 'bold', cursor: 'pointer', textDecoration: 'underline' }}
           >
             Registrate acá

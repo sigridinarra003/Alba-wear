@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './carrito.css';
 
-function Carrito({ carrito = [], modificarCantidad, eliminarProducto, irAHome }) {
+function Carrito({ carrito = [], modificarCantidad, eliminarProducto}) {
+  const navigate = useNavigate();
+
   // Estados para controlar la simulación de pago
   const [mostrarModalPago, setMostrarModalPago] = useState(false);
   const [metodoPago, setMetodoPago] = useState('tarjeta'); // 'tarjeta' o 'transferencia'
   const [procesando, setProcesando] = useState(false);
   const [pagoExitoso, setPagoExitoso] = useState(false);
+  const [totalPagado, settotalPagado] = useState(0);
 
   // Formulario del comprador
   const [datosEnvio, setDatosEnvio] = useState({
@@ -32,11 +36,13 @@ function Carrito({ carrito = [], modificarCantidad, eliminarProducto, irAHome })
   const ejecutarPagoSimulado = (e) => {
     e.preventDefault();
     setProcesando(true);
+    settotalPagado(totalFinal);
 
     // Simula espera de pasarela de pago (2.5 segundos)
     setTimeout(() => {
       setProcesando(false);
       setPagoExitoso(true);
+      localStorage.removeItem("alba_carrito")
     }, 2500);
   };
 
@@ -48,10 +54,10 @@ function Carrito({ carrito = [], modificarCantidad, eliminarProducto, irAHome })
   return (
     <div className="carrito-principal">
       <div className="carrito-contenedor">
-        
+
         <header className="carrito-header">
           <h1>Mi Carrito ({totalUnidades} {totalUnidades === 1 ? 'prenda' : 'prendas'})</h1>
-          <button onClick={irAHome} className="btn-volver-tienda">
+          <button onClick={() => navigate('/')} className="btn-volver-tienda">
             ← Volver a la tienda
           </button>
         </header>
@@ -60,9 +66,9 @@ function Carrito({ carrito = [], modificarCantidad, eliminarProducto, irAHome })
           <div style={{ padding: '60px 20px', textAlign: 'center', color: '#7a6e67' }}>
             <h2 style={{ color: '#5c3a3b', marginBottom: '10px' }}>Tu carrito está vacío</h2>
             <p style={{ fontSize: '15px', marginBottom: '25px' }}>¡Explorá Alba Wear para descubrir la mejor colección!</p>
-            <button 
-              className="btn-compra" 
-              onClick={irAHome} 
+            <button
+              className="btn-compra"
+              onClick={() => navigate('/')}
               style={{ maxWidth: '220px', margin: '0 auto' }}
             >
               Ver Productos
@@ -77,7 +83,7 @@ function Carrito({ carrito = [], modificarCantidad, eliminarProducto, irAHome })
                   <div className="item-foto">
                     <img src={prod.imagen || '/img/placeholder.jpg'} alt={prod.nombre} />
                   </div>
-                  
+
                   <div className="item-detalles">
                     <h3>{prod.nombre}</h3>
                     <p className="item-talle">Talle: {prod.talleElegido}</p>
@@ -85,8 +91,8 @@ function Carrito({ carrito = [], modificarCantidad, eliminarProducto, irAHome })
                   </div>
 
                   <div className="item-acciones">
-                    <button 
-                      onClick={() => eliminarProducto(prod.id_producto, prod.talleElegido)} 
+                    <button
+                      onClick={() => eliminarProducto(prod.id_producto, prod.talleElegido)}
                       className="btn-eliminar"
                       title="Eliminar producto"
                     >
@@ -110,14 +116,14 @@ function Carrito({ carrito = [], modificarCantidad, eliminarProducto, irAHome })
               <h2>Resumen del Pedido</h2>
 
               <div className="envio-aviso">
-                <img src="data:image/svg+xml,%3csvg width='24' height='24' fill='black' viewBox='0 0 24 24' transform='' xmlns='http://www.w3.org/2000/svg'%3e%3c!--Boxicons v3.0.8 https://boxicons.com %7c License https://docs.boxicons.com/free--%3e%3cpath d='M19.1 7.8c-.38-.5-.97-.8-1.6-.8H15V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2 0 1.65 1.35 3 3 3s3-1.35 3-3h4c0 1.65 1.35 3 3 3s3-1.35 3-3c1.1 0 2-.9 2-2v-3.67c0-.43-.14-.86-.4-1.2zM17.5 9l1.5 2h-4V9zM7 19a1.003 1.003 0 0 1-.87-1.5c.37-.63 1.36-.63 1.73 0 .09.15.13.32.13.49 0 .55-.45 1-1 1Zm2.23-3s-.05-.05-.08-.07c-.06-.06-.12-.11-.17-.16-.12-.11-.25-.21-.38-.29a3 3 0 0 0-.67-.32c-.07-.02-.14-.05-.21-.07Q7.375 15 7 15c-.375 0-.49.04-.72.09-.07.02-.14.05-.21.07-.16.05-.31.11-.45.19-.07.04-.15.08-.22.13-.13.09-.26.18-.38.29-.06.05-.12.1-.18.16-.02.03-.05.04-.08.07h-.77V6h9v10H9.22ZM17 19a1.003 1.003 0 0 1-.87-1.5c.37-.63 1.36-.63 1.73 0 .09.15.13.32.13.49 0 .55-.45 1-1 1Zm3-3h-.77s-.05-.05-.08-.07c-.06-.06-.12-.11-.17-.16-.12-.11-.25-.21-.38-.29a3 3 0 0 0-.67-.32c-.07-.02-.14-.05-.21-.07Q17.375 15 17 15c-.375 0-.47.04-.7.09-.06.01-.12.03-.18.05-.18.06-.36.13-.52.22l-.12.06c-.17.1-.33.21-.48.35v-2.76h5v3Z'%3e%3c/path%3e%3c/svg%3e" alt="" /> Envíos GRATIS en compras superiores a $50.000
+                <img src="data:image/svg+xml,%3csvg width='24' height='24' fill='black' viewBox='0 0 24 24' transform='' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M19.1 7.8c-.38-.5-.97-.8-1.6-.8H15V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2 0 1.65 1.35 3 3 3s3-1.35 3-3h4c0 1.65 1.35 3 3 3s3-1.35 3-3c1.1 0 2-.9 2-2v-3.67c0-.43-.14-.86-.4-1.2zM17.5 9l1.5 2h-4V9zM7 19a1.003 1.003 0 0 1-.87-1.5c.37-.63 1.36-.63 1.73 0 .09.15.13.32.13.49 0 .55-.45 1-1 1Zm2.23-3s-.05-.05-.08-.07c-.06-.06-.12-.11-.17-.16-.12-.11-.25-.21-.38-.29a3 3 0 0 0-.67-.32c-.07-.02-.14-.05-.21-.07Q7.375 15 7 15c-.375 0-.49.04-.72.09-.07.02-.14.05-.21.07-.16.05-.31.11-.45.19-.07.04-.15.08-.22.13-.13.09-.26.18-.38.29-.06.05-.12.1-.18.16-.02.03-.05.04-.08.07h-.77V6h9v10H9.22ZM17 19a1.003 1.003 0 0 1-.87-1.5c.37-.63 1.36-.63 1.73 0 .09.15.13.32.13.49 0 .55-.45 1-1 1Zm3-3h-.77s-.05-.05-.08-.07c-.06-.06-.12-.11-.17-.16-.12-.11-.25-.21-.38-.29a3 3 0 0 0-.67-.32c-.07-.02-.14-.05-.21-.07Q17.375 15 17 15c-.375 0-.47.04-.7.09-.06.01-.12.03-.18.05-.18.06-.36.13-.52.22l-.12.06c-.17.1-.33.21-.48.35v-2.76h5v3Z'%3e%3c/path%3e%3c/svg%3e" alt="" /> Envíos GRATIS en compras superiores a $50.000
               </div>
 
               <div className="resumen-linea">
                 <span>Subtotal ({totalUnidades} items):</span>
                 <span>${subtotalProductos.toLocaleString('es-AR')}</span>
               </div>
-              
+
               <div className="resumen-linea">
                 <span>Envío a domicilio:</span>
                 <span>{costoEnvio === 0 ? '¡GRATIS!' : `$${costoEnvio.toLocaleString('es-AR')}`}</span>
@@ -129,7 +135,7 @@ function Carrito({ carrito = [], modificarCantidad, eliminarProducto, irAHome })
               </div>
 
               <button className="btn-compra" onClick={() => setMostrarModalPago(true)}>
-                Iniciar Compra <img src="data:image/svg+xml,%3csvg width='24' height='24' fill='%23f9f9f9' viewBox='0 0 24 24' transform='' xmlns='http://www.w3.org/2000/svg'%3e%3c!--Boxicons v3.0.8 https://boxicons.com %7c License https://docs.boxicons.com/free--%3e%3cpath d='M16 12h2v4h-2z'%3e%3c/path%3e%3cpath d='M21 7h-1V4c0-.55-.45-1-1-1H5C3.35 3 2 4.35 2 6v12c0 2.2 1.79 3 3 3h16c.55 0 1-.45 1-1V8c0-.55-.45-1-1-1M5 5h13v2H5c-.55 0-1-.45-1-1s.45-1 1-1m15 14H5.01C4.55 18.99 4 18.81 4 18V8.82c.31.11.65.18 1 .18h15z'%3e%3c/path%3e%3c/svg%3e" alt="" />
+                Iniciar Compra <img src="data:image/svg+xml,%3csvg width='24' height='24' fill='%23f9f9f9' viewBox='0 0 24 24' transform='' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M16 12h2v4h-2z'%3e%3c/path%3e%3cpath d='M21 7h-1V4c0-.55-.45-1-1-1H5C3.35 3 2 4.35 2 6v12c0 2.2 1.79 3 3 3h16c.55 0 1-.45 1-1V8c0-.55-.45-1-1-1M5 5h13v2H5c-.55 0-1-.45-1-1s.45-1 1-1m15 14H5.01C4.55 18.99 4 18.81 4 18V8.82c.31.11.65.18 1 .18h15z'%3e%3c/path%3e%3c/svg%3e" alt="" />
               </button>
             </div>
           </div>
@@ -161,17 +167,20 @@ function Carrito({ carrito = [], modificarCantidad, eliminarProducto, irAHome })
                 </p>
                 <div style={{ background: '#f8f9fa', padding: '15px', borderRadius: '6px', margin: '20px 0', textAlign: 'left', fontSize: '13px' }}>
                   <p style={{ margin: '4px 0' }}><strong>Código de Pedido:</strong> #{Math.floor(100000 + Math.random() * 900000)}</p>
-                  <p style={{ margin: '4px 0' }}><strong>Monto abonado:</strong> ${totalFinal.toLocaleString('es-AR')}</p>
+                  <p style={{ margin: '4px 0' }}><strong>Monto abonado:</strong> ${totalPagado.toLocaleString('es-AR')}</p>
                   <p style={{ margin: '4px 0' }}><strong>Dirección de entrega:</strong> {datosEnvio.direccion || 'Domicilio registrado'}</p>
                 </div>
-                <button className="btn-compra" onClick={() => { cerrarModal(); irAHome(); }}>
+                <button className="btn-compra" onClick={() => {
+                  localStorage.removeItem('alba_carrito');
+                  window.location.href = '/';
+                }}>
                   Volver a la Tienda
                 </button>
               </div>
             ) : (
               <form onSubmit={ejecutarPagoSimulado}>
                 <h3 style={{ fontSize: '15px', marginBottom: '10px', color: '#333' }}>1. Datos de Entrega</h3>
-                
+
                 <div className="form-grupo">
                   <label>Nombre Completo</label>
                   <input type="text" name="nombre" value={datosEnvio.nombre} onChange={manejarCambioInput} required placeholder="Juan Pérez" />
@@ -194,21 +203,21 @@ function Carrito({ carrito = [], modificarCantidad, eliminarProducto, irAHome })
                 </div>
 
                 <h3 style={{ fontSize: '15px', margin: '20px 0 10px 0', color: '#333' }}>2. Método de Pago</h3>
-                
+
                 <div className="metodos-pago">
-                  <button 
-                    type="button" 
-                    className={`btn-metodo ${metodoPago === 'tarjeta' ? 'activo' : ''}`} 
+                  <button
+                    type="button"
+                    className={`btn-metodo ${metodoPago === 'tarjeta' ? 'activo' : ''}`}
                     onClick={() => setMetodoPago('tarjeta')}
                   >
-                     Tarjeta Débito/Crédito
+                    Tarjeta Débito/Crédito
                   </button>
-                  <button 
-                    type="button" 
-                    className={`btn-metodo ${metodoPago === 'transferencia' ? 'activo' : ''}`} 
+                  <button
+                    type="button"
+                    className={`btn-metodo ${metodoPago === 'transferencia' ? 'activo' : ''}`}
                     onClick={() => setMetodoPago('transferencia')}
                   >
-                     Transferencia / MP
+                    Transferencia / MP
                   </button>
                 </div>
 

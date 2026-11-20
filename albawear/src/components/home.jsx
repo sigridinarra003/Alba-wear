@@ -1,24 +1,17 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './home.css';
+import Navbar from './Navbar';
 import CatalogoProductos from './CatalogoProductos';
 
-function Home({ irACarrito, irALogin, irADashboard, usuario, cerrarSesion, agregarAlCarrito, totalItemsCarrito }) {
-  // ESTADOS
-  const [menuAbierto, setMenuAbierto] = useState(false);
-  const [vistaActual, setVistaActual] = useState('inicio');
-  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
-  const [talleSeleccionado, setTalleSeleccionado] = useState('');
-  const [vistaAnterior, setVistaAnterior] = useState('inicio');
+function Home({ usuario, cerrarSesion, agregarAlCarrito, totalItemsCarrito }) {
+  const navigate = useNavigate();
 
-  //  ESTADO PARA EL BUSCADOR EN TIEMPO REAL
   const [busqueda, setBusqueda] = useState('');
-
-  // Estado para los productos reales de la Base de Datos
   const [productosBD, setProductosBD] = useState([]);
   const [cargando, setCargando] = useState(true);
 
-  //  PETICIÓN A LA API DE NODE.JS
   useEffect(() => {
     axios.get('http://localhost:5000/api/productos')
       .then((res) => {
@@ -31,38 +24,13 @@ function Home({ irACarrito, irALogin, irADashboard, usuario, cerrarSesion, agreg
       });
   }, []);
 
-  // Función auxiliar para cambiar de categoría
-  const cambiarCategoria = (categoria) => {
-    setVistaActual(categoria);
-    setMenuAbierto(false);
-    setBusqueda(''); // Limpiamos la búsqueda al cambiar de categoría
-  };
-
-  //  FILTRAR PRODUCTOS POR CATEGORÍA Y BÚSQUEDA EN TIEMPO REAL
-  const productosFiltrados = productosBD.filter((prod) => {
-    const coincideNombre = prod.nombre?.toLowerCase().includes(busqueda.toLowerCase());
-
-    if (vistaActual === 'remeras') return prod.id_categoria === 1 && coincideNombre;
-    if (vistaActual === 'pantalones') return prod.id_categoria === 2 && coincideNombre;
-    if (vistaActual === 'accesorios') return prod.id_categoria === 3 && coincideNombre;
-
-    // Si estamos en inicio y hay búsqueda, filtramos sobre todos los productos
-    return coincideNombre;
-  });
-
-  // Función para guardar la vista actual e ir al detalle
-  const seleccionarProductoParaDetalle = (prod) => {
-    setVistaAnterior(vistaActual); // 👈 Guarda de qué categoría venías
-    setProductoSeleccionado(prod);
-    setTalleSeleccionado('');
-    setVistaActual('detalle');
-    setBusqueda('');
-  };
-
+  const productosFiltrados = productosBD.filter((prod) =>
+    prod.nombre?.toLowerCase().includes(busqueda.toLowerCase())
+  );
 
   return (
     <div className="principal">
-      {/*  1. BANNER PROMOCIONAL */}
+      {/* 1. BANNER PROMOCIONAL */}
       <div className="banner-promocional">
         <img src="data:image/svg+xml,%3csvg width='24' height='24' fill='black' viewBox='0 0 24 24' transform='' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12 2C6.49 2 2 6.49 2 12s4.49 10 10 10 10-4.49 10-10S17.51 2 12 2m0 18c-.34 0-.67-.03-1-.07V18l-1-1-2-2v-2l-2-2-1.57-1.57C5.5 6.28 8.49 4 12 4c1.06 0 2.07.21 3 .59V5c0 1.1-.9 2-2 2h-1v1c0 1.1-.9 2-2 2v3h4c1.1 0 2 .9 2 2v1c.69 0 1.68.35 2.33.87A7.97 7.97 0 0 1 12 20'%3e%3c/path%3e%3c/svg%3e" alt="" /> Envíos gratis a partir de $50.000 | <img src="data:image/svg+xml,%3csvg width='24' height='24' fill='black' viewBox='0 0 24 24' transform='' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M20 7h-3V3c0-.33-.16-.64-.43-.82a.98.98 0 0 0-.92-.11L3.28 6.82C2.51 7.11 2 7.87 2 8.69V20c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2m-5-2.54V7H8.39zM4 20V9h16v2h-5c-1.1 0-2 .9-2 2v3c0 1.1.9 2 2 2h5v2zm16-4h-5v-3h5z'%3e%3c/path%3e%3c/svg%3e" alt="" /> 3 cuotas sin interés
       </div>
@@ -71,69 +39,14 @@ function Home({ irACarrito, irALogin, irADashboard, usuario, cerrarSesion, agreg
         <img src="/img/logo.png" className="logo" alt="logo" />
       </div>
 
-      <div className="contenedor-navegacion">
-        <nav>
-          <ul className="lista">
-            <li onClick={() => { setVistaActual('inicio'); setBusqueda(''); }} style={{ cursor: 'pointer' }}>Inicio</li>
+      {/* NAVBAR */}
+      <Navbar 
+        usuario={usuario} 
+        cerrarSesion={cerrarSesion} 
+        totalItemsCarrito={totalItemsCarrito} 
+      />
 
-            <li
-              className="item-menu-desplegable"
-              onClick={() => setMenuAbierto(!menuAbierto)}
-              style={{ cursor: 'pointer' }}
-            >
-              Categorías ▾
-
-              {menuAbierto && (
-                <ul className="submenu-lista">
-                  <li onClick={(e) => { e.stopPropagation(); cambiarCategoria('remeras'); }}>Remeras</li>
-                  <li onClick={(e) => { e.stopPropagation(); cambiarCategoria('pantalones'); }}>Pantalones/Polleras</li>
-                </ul>
-              )}
-            </li>
-
-            <li onClick={() => { cambiarCategoria('accesorios'); }} style={{ cursor: 'pointer' }}>Accesorios</li>
-          </ul>
-        </nav>
-
-        {/* CONTENEDOR DE ÍCONOS */}
-        <div className="iconos-derecha-nav">
-          {usuario?.rol === 'admin' && (
-            <button
-              onClick={irADashboard}
-              style={{ backgroundColor: '#5c3a3b', color: 'white', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
-            >
-              <img src="data:image/svg+xml,%3csvg width='24' height='24' fill='white' viewBox='0 0 24 24' transform='' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4m0 6c-1.08 0-2-.92-2-2s.92-2 2-2 2 .92 2 2-.92 2-2 2'%3e%3c/path%3e%3cpath d='m20.42 13.4-.51-.29c.05-.37.08-.74.08-1.11s-.03-.74-.08-1.11l.51-.29c.96-.55 1.28-1.78.73-2.73l-1-1.73a2.006 2.006 0 0 0-2.73-.73l-.53.31c-.58-.46-1.22-.83-1.9-1.11v-.6c0-1.1-.9-2-2-2h-2c-1.1 0-2 .9-2 2v.6c-.67.28-1.31.66-1.9 1.11l-.53-.31c-.96-.55-2.18-.22-2.73.73l-1 1.73c-.55.96-.22 2.18.73 2.73l.51.29c-.05.37-.08.74-.08 1.11s.03.74.08 1.11l-.51.29c-.96.55-1.28 1.78-.73 2.73l1 1.73c.55.95 1.77 1.28 2.73.73l.53-.31c.58.46 1.22.83 1.9 1.11v.6c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2v-.6a8.7 8.7 0 0 0 1.9-1.11l.53.31c.95.55 2.18.22 2.73-.73l1-1.73c.55-.96.22-2.18-.73-2.73m-2.59-2.78c.11.45.17.92.17 1.38s-.06.92-.17 1.38a1 1 0 0 0 .47 1.11l1.12.65-1 1.73-1.14-.66c-.38-.22-.87-.16-1.19.14-.68.65-1.51 1.13-2.38 1.4-.42.13-.71.52-.71.96v1.3h-2v-1.3c0-.44-.29-.83-.71-.96-.88-.27-1.7-.75-2.38-1.4a1.01 1.01 0 0 0-1.19-.15l-1.14.66-1-1.73 1.12-.65c-.39-.22-.58-.68-.47-1.11-.11-.45-.17-.92-.17-1.38s.06-.93.17-1.38A1 1 0 0 0 5.7 9.5l-1.12-.65 1-1.73 1.14.66c.38.22.87.16 1.19-.14.68-.65 1.51-1.13 2.38-1.4.42-.13.71-.52.71-.96v-1.3h2v1.3c0 .44.29.83.71.96.88.27 1.7.75 2.38 1.4.32.31.81.36 1.19.14l1.14-.66 1 1.73-1.12.65c-.39.22-.58.68-.47 1.11Z'%3e%3c/path%3e%3c/svg%3e" />
-              Panel Admin
-            </button>
-          )}
-
-          {!usuario ? (
-            <button onClick={irALogin} className="btn-nav-icono" title="Iniciar Sesión">
-              <img src="data:image/svg+xml,%3csvg width='24' height='24' fill='currentColor' viewBox='0 0 24 24' transform='' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5m0-8c1.65 0 3 1.35 3 3s-1.35 3-3 3-3-1.35-3-3 1.35-3 3-3M4 22h16c.55 0 1-.45 1-1v-1c0-3.86-3.14-7-7-7h-4c-3.86 0-7 3.14-7 7v1c0 .55.45 1 1 1m6-7h4c2.76 0 5 2.24 5 5H5c0-2.76 2.24-5 5-5'%3e%3c/path%3e%3c/svg%3e" alt="" />
-            </button>
-          ) : (
-            <div className="perfil-nav-contenedor">
-              <span className="texto-bienvenida">¡Hola, {usuario.nombre || usuario.nombres}! </span>
-              <button onClick={cerrarSesion} className="btn-cerrar-sesion" title="Cerrar Sesión">
-                Salir
-              </button>
-            </div>
-          )}
-
-          <button onClick={irACarrito} className="btn-nav-icono" title="Ver mi carrito" style={{ position: 'relative' }}>
-            <img src="data:image/svg+xml,%3csvg width='24' height='24' fill='currentColor' viewBox='0 0 24 24' transform='' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12 2C9.24 2 7 4.24 7 7v1H4c-.55 0-1 .45-1 1v11c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V9c0-.55-.45-1-1-1h-3V7c0-2.76-2.24-5-5-5M9 7c0-1.65 1.35-3 3-3s3 1.35 3 3v1H9zm10 3v10H5V10z'%3e%3c/path%3e%3c/svg%3e" alt="" />
-            {totalItemsCarrito > 0 && (
-              <span className="badge-carrito" style={{
-                position: 'absolute', top: '-5px', right: '-5px', backgroundColor: '#5c3a3b', color: 'white', borderRadius: '50%', padding: '2px 6px', fontSize: '11px', fontWeight: 'bold'
-              }}>
-                {totalItemsCarrito}
-              </span>
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/*  2. BUSCADOR EN TIEMPO REAL */}
+      {/* 2. BUSCADOR EN TIEMPO REAL */}
       <div className='barra-busqueda'>
         <input
           className='contenedor-buscador'
@@ -148,191 +61,70 @@ function Home({ irACarrito, irALogin, irADashboard, usuario, cerrarSesion, agreg
       {busqueda.trim() !== '' ? (
         <div className="vista-categoria-contenedor" style={{ padding: '30px', textAlign: 'center' }}>
           <h2>Resultados para: "{busqueda}"</h2>
-
-         <CatalogoProductos 
+          <CatalogoProductos 
             productos={productosFiltrados} 
-            onSeleccionarProducto={seleccionarProductoParaDetalle} 
+            onSeleccionarProducto={(prod) => navigate(`/producto/${prod.id_producto}`)} 
           />
-  
         </div>
       ) : (
         <>
-          {/* 1. VISTA INDEPENDIENTE DE INICIO (CARRUSEL Y DESTACADOS) - SOLO SE MUESTRA SI NO SE BUSCA NADA */}
-          {vistaActual === 'inicio' && (
-            <>
-              <div className="carrusel-wrapper">
-                <div
-                  id="carouselExampleControls"
-                  className="carousel slide"
-                  data-bs-ride="carousel"
-                  data-bs-interval="3000"
-                >
-                  <div className="carousel-inner mb-5">
-                    <div className="carousel-item active">
-                      <img src="/img/imagen1.png" className="d-block w-100" alt="..." />
-                    </div>
-                    <div className="carousel-item">
-                      <img src="/img/imagen2.png" className="d-block w-100" alt="..." />
-                    </div>
-                    <div className="carousel-item">
-                      <img src="/img/imagen3.png" className="d-block w-100" alt="..." />
-                    </div>
-                    <div className="carousel-item">
-                      <img src="/img/imagen4.png" className="d-block w-100" alt="..." />
-                    </div>
-                  </div>
-                  <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span className="visually-hidden">Previous</span>
-                  </button>
-                  <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span className="visually-hidden">Next</span>
-                  </button>
+          <div className="carrusel-wrapper">
+            <div
+              id="carouselExampleControls"
+              className="carousel slide"
+              data-bs-ride="carousel"
+              data-bs-interval="3000"
+            >
+              <div className="carousel-inner mb-5">
+                <div className="carousel-item active">
+                  <img src="/img/imagen1.png" className="d-block w-100" alt="..." />
+                </div>
+                <div className="carousel-item">
+                  <img src="/img/imagen2.png" className="d-block w-100" alt="..." />
+                </div>
+                <div className="carousel-item">
+                  <img src="/img/imagen3.png" className="d-block w-100" alt="..." />
+                </div>
+                <div className="carousel-item">
+                  <img src="/img/imagen4.png" className="d-block w-100" alt="..." />
                 </div>
               </div>
-
-              <h1 className='titulo-PD'>Productos Destacados</h1>
-
-              <div className="p-destacados">
-                {cargando ? (
-                  <p>Cargando destacados...</p>
-                ) : (
-                  productosBD
-                    .filter((prod) => Boolean(prod.es_destacado))
-                    .map((prod) => (
-                      <div
-                        key={prod.id_producto}
-                        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        <img
-                          src={prod.imagen || '/img/placeholder.jpg'}
-                          alt={prod.nombre}
-                          onClick={() => {
-                            setVistaAnterior('inicio');
-                            setProductoSeleccionado(prod);
-                            setTalleSeleccionado('');
-                            setVistaActual('detalle');
-                          }}
-                          style={{ cursor: 'pointer', objectFit: 'cover' }}
-                        />
-                        <h3>{prod.nombre}</h3>
-                        <p>${Number(prod.precio).toLocaleString('es-AR')}</p>
-                      </div>
-                    ))
-                )}
-              </div>
-            </>
-          )}
-        </>
-      )}
-
-      {/* 2. VISTA DE DETALLE DEL PRODUCTO */}
-      {vistaActual === 'detalle' && productoSeleccionado && (
-        <div className="vista-detalle-producto" style={{ padding: '40px', textAlign: 'center' }}>
-          <button
-            onClick={() => {
-              setVistaActual(vistaAnterior);
-              setTalleSeleccionado('');
-            }}
-            style={{ marginBottom: '30px', cursor: 'pointer', padding: '10px 20px', borderRadius: '5px', border: '1px solid #ccc', backgroundColor: '#f9f9f9' }}
-          >
-            ← Volver al catálogo
-          </button>
-
-          <div className="detalle-contenido" style={{ display: 'flex', gap: '40px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <img
-              src={productoSeleccionado.imagen || '/img/placeholder.jpg'}
-              alt={productoSeleccionado.nombre}
-              style={{ width: '400px', borderRadius: '10px', objectFit: 'cover' }}
-            />
-            <div className="detalle-info" style={{ textAlign: 'left', maxWidth: '400px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <h2 style={{ marginBottom: '15px' }}>{productoSeleccionado.nombre}</h2>
-              <p style={{ fontSize: '18px', color: '#555', marginBottom: '20px' }}>
-                {productoSeleccionado.descripcion || 'Sin descripción disponible.'}
-              </p>
-              <h3 style={{ fontSize: '28px', color: '#222', marginBottom: '20px' }}>
-                ${Number(productoSeleccionado.precio).toLocaleString('es-AR')}
-              </h3>
-
-              {productoSeleccionado.id_categoria !== 3 && (
-                <div style={{ marginBottom: '25px' }}>
-                  <label style={{ display: 'block', fontWeight: 'bold', marginBottom: '8px' }}>Seleccioná el talle:</label>
-                  <div style={{ display: 'flex', gap: '10px' }}>
-                    {['S', 'M', 'L', 'XL'].map((talle) => (
-                      <button
-                        key={talle}
-                        type="button"
-                        onClick={() => setTalleSeleccionado(talle)}
-                        style={{
-                          padding: '8px 16px',
-                          border: talleSeleccionado === talle ? '2px solid #5c3a3b' : '1px solid #ccc',
-                          backgroundColor: talleSeleccionado === talle ? '#5c3a3b' : '#fff',
-                          color: talleSeleccionado === talle ? '#fff' : '#000',
-                          borderRadius: '4px',
-                          cursor: 'pointer',
-                          fontWeight: 'bold'
-                        }}
-                      >
-                        {talle}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <button
-                className="btn-compra"
-                onClick={() => {
-                  const esAccesorio = productoSeleccionado.id_categoria === 3;
-                  const talleFinal = esAccesorio ? 'Único' : talleSeleccionado;
-
-                  if (!esAccesorio && !talleSeleccionado) {
-                    alert('Por favor, seleccioná un talle antes de agregar al carrito.');
-                    return;
-                  }
-
-                  const productoConTalle = {
-                    ...productoSeleccionado,
-                    talleElegido: talleFinal
-                  };
-
-                  agregarAlCarrito(productoConTalle);
-
-                  if (esAccesorio) {
-                    alert('¡Accesorio agregado al carrito!');
-                  } else {
-                    alert(`¡Producto agregado al carrito en talle ${talleSeleccionado}!`);
-                  }
-                }}
-                style={{ padding: '15px', backgroundColor: '#5c3a3b', color: 'white', border: 'none', borderRadius: '5px', fontSize: '18px', cursor: 'pointer', fontWeight: 'bold' }}
-              >
-                Agregar al carrito <img src="" alt="" />
+              <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span className="visually-hidden">Previous</span>
+              </button>
+              <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                <span className="visually-hidden">Next</span>
               </button>
             </div>
           </div>
-        </div>
-      )}
 
-      {/* 3. VISTAS DE CATEGORÍAS (CATÁLOGO) - SOLO SI NO SE ESTÁ BUSCANDO */}
-      {busqueda.trim() === '' && vistaActual !== 'inicio' && vistaActual !== 'detalle' && (
-        <div className="vista-categoria-contenedor">
-          <div className="titulo-seccion-contenedor">
-            <span className="btn-categoria-indicador">
-              {vistaActual === 'remeras' && 'Remeras'}
-              {vistaActual === 'pantalones' && 'Pantalones/Polleras'}
-              {vistaActual === 'accesorios' && 'Accesorios'}
-            </span>
+          <h1 className='titulo-PD'>Productos Destacados</h1>
+
+          <div className="p-destacados">
+            {cargando ? (
+              <p>Cargando destacados...</p>
+            ) : (
+              productosBD
+                .filter((prod) => Boolean(prod.es_destacado))
+                .map((prod) => (
+                  <div
+                    key={prod.id_producto}
+                    style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <img
+                      src={prod.imagen || '/img/placeholder.jpg'}
+                      alt={prod.nombre}
+                      onClick={() => navigate(`/producto/${prod.id_producto}`)}
+                      style={{ cursor: 'pointer', objectFit: 'cover' }}
+                    />
+                    <h3>{prod.nombre}</h3>
+                    <p>${Number(prod.precio).toLocaleString('es-AR')}</p>
+                  </div>
+                ))
+            )}
           </div>
-
-          {cargando ? (
-            <p style={{ textAlign: 'center', padding: '20px' }}>Cargando productos de la base de datos...</p>
-          ) : (
-           <CatalogoProductos 
-              productos={productosFiltrados} 
-              onSeleccionarProducto={seleccionarProductoParaDetalle} 
-            />
-          )}
-        </div>
+        </>
       )}
 
       <footer className="pie-pagina">
@@ -341,7 +133,7 @@ function Home({ irACarrito, irALogin, irADashboard, usuario, cerrarSesion, agreg
           <p>Tu tienda online de indumentaria y accesorios.</p>
         </div>
         <div className='caja-logo-fott'>
-          <img className='logo-fotter' src="img/logo.png" alt="" />
+          <img className='logo-fotter' src="/img/logo.png" alt="" />
         </div>
         <div className="footer-columna">
           <h4>Contactos</h4>

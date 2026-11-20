@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './login.css';
 
-function Registro({ irAHome, irALogin }) {
-  // Ahora tenemos dos estados separados
+function Registro() {
+  const navigate = useNavigate();
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
   const [correo, setCorreo] = useState('');
@@ -24,7 +25,7 @@ function Registro({ irAHome, irALogin }) {
     .then((res) => {
       setMensaje({ texto: '¡Registro exitoso! Redirigiendo al login...', tipo: 'exito' });
       setTimeout(() => {
-        irALogin();
+        navigate('/login');
       }, 2000);
     })
     .catch((err) => {
@@ -40,7 +41,7 @@ function Registro({ irAHome, irALogin }) {
     <div className="login-principal">
       <div className="login-caja">
         <button 
-          onClick={irAHome} 
+          onClick={() => navigate('/')} 
           style={{ background: 'none', border: 'none', cursor: 'pointer', marginBottom: '20px', textDecoration: 'underline' }}
         >
           ← Volver a la tienda
@@ -109,7 +110,7 @@ function Registro({ irAHome, irALogin }) {
         <div style={{ textAlign: 'center', marginTop: '10px' }}>
           <span>¿Ya tenés una cuenta? </span>
           <button 
-            onClick={irALogin} 
+            onClick={() => navigate('/login')} 
             style={{ background: 'none', border: 'none', color: '#5c3a3b', fontWeight: 'bold', cursor: 'pointer', textDecoration: 'underline' }}
           >
             Iniciá sesión

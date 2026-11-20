@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-function Dashboard({ usuario, irAHome }) {
+function Dashboard({ usuario }) {
+  const navigate = useNavigate();
   const [productosBD, setProductosBD] = useState([]);
   const [cargando, setCargando] = useState(true);
 
@@ -145,7 +147,7 @@ function Dashboard({ usuario, irAHome }) {
   return (
     <div style={{ padding: '30px', maxWidth: '1000px', margin: '0 auto', textAlign: 'left' }}>
       <button
-        onClick={irAHome}
+        onClick={() => navigate('/')}
         style={{ padding: '8px 15px', cursor: 'pointer', marginBottom: '20px', backgroundColor: '#f0f0f0', border: '1px solid #ccc', borderRadius: '4px' }}
       >
         ← Volver a la Tienda
@@ -229,6 +231,7 @@ function Dashboard({ usuario, irAHome }) {
         <span style={{ color: '#666', fontSize: '14px' }}>
           Mostrando {productosFiltradosAdmin.length} de {productosBD.length} productos
         </span>
+
       </div>
 
 
